@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="george87pl.boardgames.MainActivity">
+    <item
+        android:id="@+id/action_rozgrywki"
+        android:orderInCategory="100"
+        android:title="Rozgrywki"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_gry"
+        android:orderInCategory="101"
+        android:title="Kolekcja gier"
+        app:showAsAction="never" />
+</menu>

@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="george87pl.boardgames.MainActivity">
+
+    <item
+        android:id="@+id/graZapisz2"
+        android:icon="@android:drawable/ic_menu_save"
+        android:title="Dodaj gre"
+        app:showAsAction="always" />
+</menu>
