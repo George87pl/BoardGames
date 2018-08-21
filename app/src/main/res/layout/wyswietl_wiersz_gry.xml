@@ -41,7 +41,7 @@
         app:layout_constraintEnd_toEndOf="@+id/gZdjecieGry"
         app:layout_constraintStart_toStartOf="@+id/gZdjecieGry"
         app:layout_constraintTop_toTopOf="@+id/gZdjecieGry"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="1.0"
         tools:text="NazwaGry" />
 
 </android.support.constraint.ConstraintLayout>

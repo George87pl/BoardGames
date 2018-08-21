@@ -1,11 +1,9 @@
 package george87pl.boardgames;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,11 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +35,7 @@ public class DodajGre extends AppCompatActivity {
 //    static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int PICK_IMAGE = 1;
     Bitmap imageBitmap;
+    Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +81,10 @@ public class DodajGre extends AppCompatActivity {
 
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE) {
-            Uri uri = data.getData();
-            gGraZdjecieZrob.setImageURI(uri);
+            imageUri = data.getData();
+            Log.d(TAG, "onActivityResult: IMAGE URI!!!!!!!!! " +imageUri);
+            gGraZdjecieZrob.setImageURI(imageUri);
+            czyByloZdjecie = true;
         }
     }
 
@@ -123,17 +120,39 @@ public class DodajGre extends AppCompatActivity {
                             storageDir      /* directory */);
 
                     mCurrentPhotoPath = image.getAbsolutePath();
-
-                    OutputStream out = null;
-                    out = new FileOutputStream(image);
-                    imageBitmap = Bitmap.createScaledBitmap(imageBitmap, 120, 96, true);
-                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                    out.flush();
-                    out.close();
-
                 } catch (IOException e) {
                     Log.d(TAG, "onOptionsItemSelected: IOException " + e);
                 }
+
+
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                FileOutputStream out = null;
+                try {
+                    out = new FileOutputStream(mCurrentPhotoPath);
+                    bitmap = Bitmap.createScaledBitmap(bitmap, 120, 96, false);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out); // bmp is your Bitmap instance
+                    // PNG is a lossless format, the compression factor (100) is ignored
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (out != null) {
+                            out.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+
                 values.put(GraContract.Kolumny.GRA_ZDJECIE, mCurrentPhotoPath);
             }
 

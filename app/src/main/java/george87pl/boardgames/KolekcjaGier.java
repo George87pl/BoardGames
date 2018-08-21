@@ -53,7 +53,7 @@ public class KolekcjaGier extends AppCompatActivity implements AppDialog.DialogE
                 projection,
                 null,
                 null,
-                GraContract.Kolumny.GRA_NAZWA);
+                GraContract.Kolumny.GRA_NAZWA + " COLLATE NOCASE");
 
 
         int id;
