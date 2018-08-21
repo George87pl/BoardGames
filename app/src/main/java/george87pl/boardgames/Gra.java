@@ -2,6 +2,7 @@ package george87pl.boardgames;
 
 class Gra {
 
+    //Zmieena dle gry
     private int idGry;
     private String gZdjecieGry;
     private String gNazwaGry;
