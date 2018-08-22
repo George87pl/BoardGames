@@ -49,8 +49,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         });
 
 
-        String[] projection = {RozgrywkaContract.Kolumny.ROZGRYWKA_NAZWA,
-                                RozgrywkaContract.Kolumny.ROZGRYWKA_OPIS,
+        String[] projection = { RozgrywkaContract.Kolumny.ROZGRYWKA_OPIS,
                                 RozgrywkaContract.Kolumny.ROZGRYWKA_ZDJECIE,
                                 RozgrywkaContract.Kolumny.ROZGRYWKA_DATA};
 
@@ -70,12 +69,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         if (cursor != null) {
             while (cursor.moveToNext()) {
 
-                nazwa = cursor.getString(cursor.getColumnIndex(RozgrywkaContract.Kolumny.ROZGRYWKA_NAZWA));
+//                nazwa = cursor.getString(cursor.getColumnIndex(GraContract.Kolumny.GRA_NAZWA));
                 opis = cursor.getString(cursor.getColumnIndex(RozgrywkaContract.Kolumny.ROZGRYWKA_OPIS));
                 data = cursor.getString(cursor.getColumnIndex(RozgrywkaContract.Kolumny.ROZGRYWKA_DATA));
                 zdjecie = cursor.getString(cursor.getColumnIndex(RozgrywkaContract.Kolumny.ROZGRYWKA_ZDJECIE));
 
-                listaRozgrywek.add(new Rozgrywka(null, nazwa, data, opis, zdjecie));
+                listaRozgrywek.add(new Rozgrywka(null, "Jakas gra", data, opis, zdjecie));
 
             }
         }
@@ -133,8 +132,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         args.putString(AppDialog.DIALOG_MESSAGE, "Usunąć " +nazwaGry+ "?");
         args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
 
-        String selection = RozgrywkaContract.Kolumny.ROZGRYWKA_NAZWA + " = \"" +nazwaGry +"\"";
-        args.putString("selection", selection);
+//        String selection = RozgrywkaContract.Kolumny.ROZGRYWKA_NAZWA + " = \"" +nazwaGry +"\"";
+//        args.putString("selection", selection);
 
         dialog.setArguments(args);
         dialog.show(getFragmentManager(), null);

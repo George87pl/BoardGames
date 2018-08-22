@@ -78,7 +78,7 @@ public class KolekcjaGier extends AppCompatActivity implements AppDialog.DialogE
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(KolekcjaGier.this, DodajRozgrywke.class);
-                intent.putExtra("Gra", listaGier.get(position).getidGry());
+                intent.putExtra("Gra", listaGier.get(position));  //działa bo klasa obiektu implementuje Serializable
                 startActivity(intent);
             }
         });

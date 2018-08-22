@@ -7,7 +7,7 @@ import android.util.Log;
 
 /**
  * Prosta klasa bazodanowa
- *
+ * <p>
  * Używana jedynie przez {@link AppProvider}.
  */
 
@@ -23,14 +23,15 @@ class BazaDanych extends SQLiteOpenHelper {
     public BazaDanych(Context context) {
         super(context, BAZA_NAZWA, null, BAZA_WERSJA);
     }
+
     /**
      * Tworzy jedyną instancję (singleton) klasy bazodanowej
      *
      * @param context content provider context
      * @return obiekt klasy SQLiteOpenHelper
      */
-    public static BazaDanych stworzInstancje(Context context){
-        if(instancja == null) {
+    public static BazaDanych stworzInstancje(Context context) {
+        if (instancja == null) {
             Log.d(TAG, "stworzInstancje: tworzenie nowej instancji");
             instancja = new BazaDanych(context);
         }
@@ -42,20 +43,33 @@ class BazaDanych extends SQLiteOpenHelper {
         Log.d(TAG, "onCreate: start");
         String sSQL; //Zmienna typu String do analizowania logów
 
-        sSQL = "CREATE TABLE IF NOT EXISTS " +RozgrywkaContract.TABELA_NAZWA + " ("
-                +RozgrywkaContract.Kolumny.ROZGRYWKA_ID+ " INTEGER PRIMARY KEY NOT NULL, "
-                +RozgrywkaContract.Kolumny.ROZGRYWKA_GRA+ " INTEGER, "
-                +RozgrywkaContract.Kolumny.ROZGRYWKA_NAZWA+ " INTEGER, "
-                +RozgrywkaContract.Kolumny.ROZGRYWKA_DATA+ " TEXT, "
-                +RozgrywkaContract.Kolumny.ROZGRYWKA_OPIS+ " TEXT, "
-                +RozgrywkaContract.Kolumny.ROZGRYWKA_ZDJECIE+ " TEXT);";
+        sSQL = "CREATE TABLE IF NOT EXISTS " + RozgrywkaContract.TABELA_NAZWA + " ("
+                + RozgrywkaContract.Kolumny.ROZGRYWKA_ID + " INTEGER PRIMARY KEY NOT NULL, "
+                + RozgrywkaContract.Kolumny.ROZGRYWKA_GRA + " INTEGER NOT NULL, "
+                + RozgrywkaContract.Kolumny.ROZGRYWKA_DATA + " TEXT NOT NULL, "
+                + RozgrywkaContract.Kolumny.ROZGRYWKA_OPIS + " TEXT, "
+                + RozgrywkaContract.Kolumny.ROZGRYWKA_ZDJECIE + " TEXT);";
         Log.d(TAG, sSQL);
         db.execSQL(sSQL);
 
-        sSQL = "CREATE TABLE IF NOT EXISTS " +GraContract.TABELA_NAZWA + " ("
-                +GraContract.Kolumny.GRA_ID+ " INTEGER PRIMARY KEY NOT NULL, "
-                +GraContract.Kolumny.GRA_NAZWA+ " TEXT, "
-                +GraContract.Kolumny.GRA_ZDJECIE+ " TEXT);";
+        sSQL = "CREATE TABLE IF NOT EXISTS " + GraContract.TABELA_NAZWA + " ("
+                + GraContract.Kolumny.GRA_ID + " INTEGER PRIMARY KEY NOT NULL, "
+                + GraContract.Kolumny.GRA_NAZWA + " TEXT, "
+                + GraContract.Kolumny.GRA_ZDJECIE + " TEXT);";
+        Log.d(TAG, sSQL);
+        db.execSQL(sSQL);
+
+        sSQL = "CREATE VIEW " + WidokContract.TABELA_NAZWA
+                + " AS SELECT " + GraContract.TABELA_NAZWA + "." + GraContract.Kolumny.GRA_NAZWA + ", "
+                + GraContract.TABELA_NAZWA + "." + GraContract.Kolumny.GRA_ZDJECIE + ", "
+                + RozgrywkaContract.TABELA_NAZWA + "." + RozgrywkaContract.Kolumny.ROZGRYWKA_DATA + ", "
+                + RozgrywkaContract.TABELA_NAZWA + "." + RozgrywkaContract.Kolumny.ROZGRYWKA_OPIS + ", "
+                + RozgrywkaContract.TABELA_NAZWA + "." + RozgrywkaContract.Kolumny.ROZGRYWKA_ZDJECIE
+                + " FROM " + RozgrywkaContract.TABELA_NAZWA
+                + " INNER JOIN " + GraContract.TABELA_NAZWA
+                +  " ON " + RozgrywkaContract.Kolumny.ROZGRYWKA_GRA + "=" + GraContract.Kolumny.GRA_ID //TODO poptawic te linijke
+                +";";
+
         Log.d(TAG, sSQL);
         db.execSQL(sSQL);
 
@@ -66,12 +80,12 @@ class BazaDanych extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(TAG, "onUpgrade: start");
 
-        switch(oldVersion) {
+        switch (oldVersion) {
             case 1:
                 // ulepszenie z wersji 1
                 break;
             default:
-                throw new IllegalStateException("onUpgrade() z nieznaną newVersion: " +newVersion);
+                throw new IllegalStateException("onUpgrade() z nieznaną newVersion: " + newVersion);
         }
         Log.d(TAG, "onUpgrade: koniec");
     }

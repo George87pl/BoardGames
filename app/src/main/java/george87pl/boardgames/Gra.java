@@ -1,7 +1,10 @@
 package george87pl.boardgames;
 
-class Gra {
+import java.io.Serializable;
 
+class Gra implements Serializable {
+
+    private static final long serialVersionUID = 1L;  //Do przesyłania obiektu w intentach / zmienna dla zgodności z różnymi wersjami
     private int idGry;
     private String gZdjecieGry;
     private String gNazwaGry;

@@ -54,11 +54,6 @@ public class DodajRozgrywke extends AppCompatActivity {
         mOpisGry = findViewById(R.id.graOpisDodaj);
         mRozgrywkaZdjecieZrob = findViewById(R.id.rozgrywkaZdjecieZrob);
 
-        Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-            Toast.makeText(this, "Bundle " +extras.getInt("Gra"), Toast.LENGTH_SHORT).show();
-        }
-
         View.OnClickListener kiedyCosKlikniete = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,17 +97,19 @@ public class DodajRozgrywke extends AppCompatActivity {
             ContentResolver contentResolver = getContentResolver();
             ContentValues values = new ContentValues();
 
-            if(czyByloZdjecie) {
-                values.put(RozgrywkaContract.Kolumny.ROZGRYWKA_ZDJECIE, mCurrentPhotoPath);
-            }
+            Intent intentGra = getIntent();
+            Gra gra = (Gra) intentGra.getSerializableExtra("Gra"); // Dostaje tu teraz kompletny obiekt, wybrany z kolekcji gier
 
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat format = new SimpleDateFormat("d.MM.yyyy hh:mm");
 
+            values.put(RozgrywkaContract.Kolumny.ROZGRYWKA_GRA, gra.getidGry());
             values.put(RozgrywkaContract.Kolumny.ROZGRYWKA_DATA, format.format(calendar.getTime()));
-            values.put(RozgrywkaContract.Kolumny.ROZGRYWKA_NAZWA, mNazwaGry.getText().toString());
             values.put(RozgrywkaContract.Kolumny.ROZGRYWKA_OPIS, mOpisGry.getText().toString());
             contentResolver.insert(RozgrywkaContract.CONTENT_URI, values);
+            if(czyByloZdjecie) {
+                values.put(RozgrywkaContract.Kolumny.ROZGRYWKA_ZDJECIE, mCurrentPhotoPath);
+            }
 
             Intent intent = new Intent(DodajRozgrywke.this, MainActivity.class);
             startActivity(intent);
