@@ -42,12 +42,12 @@ class RozgrywkaRecyclerViewAdapter extends RecyclerView.Adapter<RozgrywkaRecycle
 
         Rozgrywka rozgrywkaItem = mRozgrywkaList.get(position);
 
-//        if(rozgrywkaItem.getZdjecieRozgrywki() != null) {
-//            String mCurrentPhotoPath = rozgrywkaItem.getZdjecieRozgrywki();
-//            File f = new File(mCurrentPhotoPath);
-//            Uri contentUri = Uri.fromFile(f);
-//            holder.zdjecie.setImageURI(contentUri);
-//        }
+        if(rozgrywkaItem.getZdjecieRozgrywki() != null) {
+            String mCurrentPhotoPath = rozgrywkaItem.getZdjecieRozgrywki();
+            File f = new File(mCurrentPhotoPath);
+            Uri contentUri = Uri.fromFile(f);
+            holder.zdjecie.setImageURI(contentUri);
+        }
 
         holder.nazwa.setText(rozgrywkaItem.getNazwaGry());
         holder.opis.setText(rozgrywkaItem.getOpis());
@@ -77,7 +77,7 @@ class RozgrywkaRecyclerViewAdapter extends RecyclerView.Adapter<RozgrywkaRecycle
             Log.d(TAG, "RozgrywkaWierszViewHolder: ");
 
 
-//            this.zdjecie = itemView.findViewById(R.id.zdjecie_gry);
+            this.zdjecie = itemView.findViewById(R.id.zdjecie_gry);
             this.nazwa = itemView.findViewById(R.id.tytul_gry);
             this.opis = itemView.findViewById(R.id.opis_gry);
             this.data = itemView.findViewById(R.id.data_gry);

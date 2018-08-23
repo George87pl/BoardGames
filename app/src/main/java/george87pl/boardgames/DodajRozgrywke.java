@@ -50,7 +50,6 @@ public class DodajRozgrywke extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mNazwaGry = findViewById(R.id.graNazwaDodaj);
         mOpisGry = findViewById(R.id.graOpisDodaj);
         mRozgrywkaZdjecieZrob = findViewById(R.id.rozgrywkaZdjecieZrob);
 

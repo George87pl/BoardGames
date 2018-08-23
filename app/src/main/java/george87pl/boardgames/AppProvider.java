@@ -31,16 +31,21 @@ public class AppProvider extends ContentProvider{
     private static final int GRA = 200;
     private static final int GRA_ID = 201;
 
+    private static final int WIDOK = 300;
+    private static final int WIDOK_ID = 301;
+
     private static UriMatcher zbudujUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 
         //content://akademia.george87pl.playmoregames.provider/ROZGRYWKI
         matcher.addURI(CONTENT_AUTHORITY, RozgrywkaContract.TABELA_NAZWA, ROZGRYWKA);
         matcher.addURI(CONTENT_AUTHORITY, GraContract.TABELA_NAZWA, GRA);
+        matcher.addURI(CONTENT_AUTHORITY, WidokContract.TABELA_NAZWA, WIDOK);
 
         //np. content://akademia.george87pl.playmoregames.provider/ROZGRYWKI/6
         matcher.addURI(CONTENT_AUTHORITY, RozgrywkaContract.TABELA_NAZWA + "/#", ROZGRYWKA_ID);
         matcher.addURI(CONTENT_AUTHORITY, GraContract.TABELA_NAZWA + "/#", GRA_ID);
+        matcher.addURI(CONTENT_AUTHORITY, WidokContract.TABELA_NAZWA + "/#", WIDOK_ID);
 
         return matcher;
     }
@@ -79,6 +84,15 @@ public class AppProvider extends ContentProvider{
                 queryBuilder.appendWhere(GraContract.Kolumny.GRA_ID + " = " + graId);
                 break;
 
+            case WIDOK:
+                queryBuilder.setTables(WidokContract.TABELA_NAZWA);
+                break;
+            case WIDOK_ID:
+                queryBuilder.setTables(WidokContract.TABELA_NAZWA);
+                long widokId = WidokContract.pobierzWidokId(uri);
+                queryBuilder.appendWhere(WidokContract.Kolumny._ID + " = " + widokId);
+                break;
+
             default:
                 throw new IllegalArgumentException("Nieznane URI" +uri);
         }
@@ -108,6 +122,12 @@ public class AppProvider extends ContentProvider{
                 return GraContract.CONTENT_TYPE;
 
             case GRA_ID:
+                return GraContract.CONTENT_ITEM_TYPE;
+
+            case WIDOK:
+                return GraContract.CONTENT_TYPE;
+
+            case WIDOK_ID:
                 return GraContract.CONTENT_ITEM_TYPE;
 
             default:

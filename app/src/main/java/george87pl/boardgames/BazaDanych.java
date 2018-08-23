@@ -60,14 +60,15 @@ class BazaDanych extends SQLiteOpenHelper {
         db.execSQL(sSQL);
 
         sSQL = "CREATE VIEW " + WidokContract.TABELA_NAZWA
-                + " AS SELECT " + GraContract.TABELA_NAZWA + "." + GraContract.Kolumny.GRA_NAZWA + ", "
+                + " AS SELECT " + RozgrywkaContract.TABELA_NAZWA + "." + RozgrywkaContract.Kolumny.ROZGRYWKA_ID + ", "
+                + GraContract.TABELA_NAZWA + "." + GraContract.Kolumny.GRA_NAZWA + ", "
                 + GraContract.TABELA_NAZWA + "." + GraContract.Kolumny.GRA_ZDJECIE + ", "
                 + RozgrywkaContract.TABELA_NAZWA + "." + RozgrywkaContract.Kolumny.ROZGRYWKA_DATA + ", "
                 + RozgrywkaContract.TABELA_NAZWA + "." + RozgrywkaContract.Kolumny.ROZGRYWKA_OPIS + ", "
                 + RozgrywkaContract.TABELA_NAZWA + "." + RozgrywkaContract.Kolumny.ROZGRYWKA_ZDJECIE
                 + " FROM " + RozgrywkaContract.TABELA_NAZWA
                 + " INNER JOIN " + GraContract.TABELA_NAZWA
-                +  " ON " + RozgrywkaContract.Kolumny.ROZGRYWKA_GRA + "=" + GraContract.Kolumny.GRA_ID //TODO poptawic te linijke
+                +  " ON " + RozgrywkaContract.TABELA_NAZWA + "." + RozgrywkaContract.Kolumny.ROZGRYWKA_GRA + " = " + GraContract.TABELA_NAZWA + "." + GraContract.Kolumny.GRA_ID
                 +";";
 
         Log.d(TAG, sSQL);

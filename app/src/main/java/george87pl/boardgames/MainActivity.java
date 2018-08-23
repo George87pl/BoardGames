@@ -43,38 +43,45 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, DodajRozgrywke.class);
+                Intent intent = new Intent(MainActivity.this, KolekcjaGier.class);
                 startActivity(intent);
             }
         });
 
 
-        String[] projection = { RozgrywkaContract.Kolumny.ROZGRYWKA_OPIS,
-                                RozgrywkaContract.Kolumny.ROZGRYWKA_ZDJECIE,
-                                RozgrywkaContract.Kolumny.ROZGRYWKA_DATA};
+        String[] projection = { WidokContract.Kolumny._ID,
+                                WidokContract.Kolumny.WIDOK_GRA,
+                                WidokContract.Kolumny.WIDOK_GRA_ZDJECIE,
+                                WidokContract.Kolumny.WIDOK_DATA,
+                                WidokContract.Kolumny.WIDOK_OPIS,
+                                WidokContract.Kolumny.WIDOK_ROZGRYWKA_ZDJECIE};
 
         ContentResolver contentResolver = getContentResolver();
-        Cursor cursor = contentResolver.query(RozgrywkaContract.CONTENT_URI,
+        Cursor cursor = contentResolver.query(WidokContract.CONTENT_URI,
                 projection,
                 null,
                 null,
                 null);
 
 
-        String nazwa;
-        String opis;
-        String data;
-        String zdjecie;
+        int idGry;
+        String nazwaGry;
+        String zdjecieGry;
+        String dataRozgrywki;
+        String opisRozgrywki;
+        String zdjecieRozgrywki;
 
         if (cursor != null) {
             while (cursor.moveToNext()) {
 
-//                nazwa = cursor.getString(cursor.getColumnIndex(GraContract.Kolumny.GRA_NAZWA));
-                opis = cursor.getString(cursor.getColumnIndex(RozgrywkaContract.Kolumny.ROZGRYWKA_OPIS));
-                data = cursor.getString(cursor.getColumnIndex(RozgrywkaContract.Kolumny.ROZGRYWKA_DATA));
-                zdjecie = cursor.getString(cursor.getColumnIndex(RozgrywkaContract.Kolumny.ROZGRYWKA_ZDJECIE));
+                idGry = cursor.getInt(cursor.getColumnIndex(WidokContract.Kolumny._ID));
+                nazwaGry = cursor.getString(cursor.getColumnIndex(WidokContract.Kolumny.WIDOK_GRA));
+                zdjecieGry = cursor.getString(cursor.getColumnIndex(WidokContract.Kolumny.WIDOK_GRA_ZDJECIE));
+                dataRozgrywki = cursor.getString(cursor.getColumnIndex(WidokContract.Kolumny.WIDOK_DATA));
+                opisRozgrywki = cursor.getString(cursor.getColumnIndex(WidokContract.Kolumny.WIDOK_OPIS));
+                zdjecieRozgrywki = cursor.getString(cursor.getColumnIndex(WidokContract.Kolumny.WIDOK_ROZGRYWKA_ZDJECIE));
 
-                listaRozgrywek.add(new Rozgrywka(null, "Jakas gra", data, opis, zdjecie));
+                listaRozgrywek.add(new Rozgrywka(idGry, zdjecieGry, nazwaGry, dataRozgrywki, opisRozgrywki, zdjecieRozgrywki));
 
             }
         }

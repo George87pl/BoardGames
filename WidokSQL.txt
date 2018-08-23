@@ -1,0 +1,1 @@
+CREATE VIEW vwRozgrywkiCalosc AS SELECT Gry.Nazwa, Gry.Zdjecie, Rozgrywki.Data, Rozgrywki.Opis, Rozgrywki.Zdjecie FROM Rozgrywki INNER JOIN Gry ON Rozgrywki.Gra = Gry._id;
