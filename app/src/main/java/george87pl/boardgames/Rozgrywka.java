@@ -1,9 +1,11 @@
 package george87pl.boardgames;
 
-import android.net.Uri;
 
-class Rozgrywka {
+import java.io.Serializable;
 
+class Rozgrywka implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     private int mId;
     private String mZdjecieGry;
     private String mNazwaGry;

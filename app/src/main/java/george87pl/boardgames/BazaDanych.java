@@ -66,6 +66,7 @@ class BazaDanych extends SQLiteOpenHelper {
                 + RozgrywkaContract.TABELA_NAZWA + "." + RozgrywkaContract.Kolumny.ROZGRYWKA_DATA + ", "
                 + RozgrywkaContract.TABELA_NAZWA + "." + RozgrywkaContract.Kolumny.ROZGRYWKA_OPIS + ", "
                 + RozgrywkaContract.TABELA_NAZWA + "." + RozgrywkaContract.Kolumny.ROZGRYWKA_ZDJECIE
+                + " AS ZdjecieRozgrywki"
                 + " FROM " + RozgrywkaContract.TABELA_NAZWA
                 + " INNER JOIN " + GraContract.TABELA_NAZWA
                 +  " ON " + RozgrywkaContract.TABELA_NAZWA + "." + RozgrywkaContract.Kolumny.ROZGRYWKA_GRA + " = " + GraContract.TABELA_NAZWA + "." + GraContract.Kolumny.GRA_ID

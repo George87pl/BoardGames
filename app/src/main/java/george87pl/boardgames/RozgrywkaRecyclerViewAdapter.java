@@ -42,8 +42,8 @@ class RozgrywkaRecyclerViewAdapter extends RecyclerView.Adapter<RozgrywkaRecycle
 
         Rozgrywka rozgrywkaItem = mRozgrywkaList.get(position);
 
-        if(rozgrywkaItem.getZdjecieRozgrywki() != null) {
-            String mCurrentPhotoPath = rozgrywkaItem.getZdjecieRozgrywki();
+        if(rozgrywkaItem.getZdjecieGry() != null) {
+            String mCurrentPhotoPath = rozgrywkaItem.getZdjecieGry();
             File f = new File(mCurrentPhotoPath);
             Uri contentUri = Uri.fromFile(f);
             holder.zdjecie.setImageURI(contentUri);

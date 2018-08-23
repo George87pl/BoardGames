@@ -105,10 +105,11 @@ public class DodajRozgrywke extends AppCompatActivity {
             values.put(RozgrywkaContract.Kolumny.ROZGRYWKA_GRA, gra.getidGry());
             values.put(RozgrywkaContract.Kolumny.ROZGRYWKA_DATA, format.format(calendar.getTime()));
             values.put(RozgrywkaContract.Kolumny.ROZGRYWKA_OPIS, mOpisGry.getText().toString());
-            contentResolver.insert(RozgrywkaContract.CONTENT_URI, values);
             if(czyByloZdjecie) {
                 values.put(RozgrywkaContract.Kolumny.ROZGRYWKA_ZDJECIE, mCurrentPhotoPath);
             }
+            contentResolver.insert(RozgrywkaContract.CONTENT_URI, values);
+
 
             Intent intent = new Intent(DodajRozgrywke.this, MainActivity.class);
             startActivity(intent);

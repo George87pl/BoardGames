@@ -18,7 +18,7 @@ public class WidokContract {
         public static final String WIDOK_GRA_ZDJECIE = GraContract.Kolumny.GRA_ZDJECIE;
         public static final String WIDOK_DATA = RozgrywkaContract.Kolumny.ROZGRYWKA_DATA;
         public static final String WIDOK_OPIS = RozgrywkaContract.Kolumny.ROZGRYWKA_OPIS;
-        public static final String WIDOK_ROZGRYWKA_ZDJECIE = RozgrywkaContract.Kolumny.ROZGRYWKA_ZDJECIE;
+        public static final String WIDOK_ROZGRYWKA_ZDJECIE = "ZdjecieRozgrywki";
 
         private Kolumny() {
             //prywatny konstruktor aby zapobiec stworzeniu instancji

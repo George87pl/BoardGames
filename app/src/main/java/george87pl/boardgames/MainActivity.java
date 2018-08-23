@@ -81,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
                 opisRozgrywki = cursor.getString(cursor.getColumnIndex(WidokContract.Kolumny.WIDOK_OPIS));
                 zdjecieRozgrywki = cursor.getString(cursor.getColumnIndex(WidokContract.Kolumny.WIDOK_ROZGRYWKA_ZDJECIE));
 
+                Log.d(TAG, "onCreate: zdjecieRozgrywki:" +zdjecieRozgrywki);
+
                 listaRozgrywek.add(new Rozgrywka(idGry, zdjecieGry, nazwaGry, dataRozgrywki, opisRozgrywki, zdjecieRozgrywki));
 
             }
@@ -124,7 +126,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     @Override
     public void onItemClick(View view, int pozycja) {
         Log.d(TAG, "onItemClick: start");
-        Toast.makeText(MainActivity.this, "Normal tap on position " +pozycja , Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, SzczegolyRozgrywki.class);
+        intent.putExtra("rozgrywka", listaRozgrywek.get(pozycja));
+        startActivity(intent);
     }
 
     @Override
