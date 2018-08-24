@@ -86,6 +86,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
                 listaRozgrywek.add(new Rozgrywka(idGry, zdjecieGry, nazwaGry, dataRozgrywki, opisRozgrywki, zdjecieRozgrywki));
 
             }
+        } else {
+            Log.d(TAG, "onCreate: KURSOR JEST PUSTY");  //TODO
+            listaRozgrywek.add(new Rozgrywka(1, null, "brak rozgrywek", null, null, null));
         }
 
         mRozgrywkaRecyclerViewAdapter = new RozgrywkaRecyclerViewAdapter(this, listaRozgrywek);
@@ -135,16 +138,16 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     public void onLongItemClick(View view, int pozycja) {
         Log.d(TAG, "onLongItemClick: start");
 
-        String nazwaGry = listaRozgrywek.get(pozycja).getNazwaGry();
+        int idRozgrywki = listaRozgrywek.get(pozycja).getId();
 
         AppDialog dialog = new AppDialog();
         Bundle args = new Bundle();
         args.putInt(AppDialog.DIALOG_ID, DELETE_DIALOG_ID);
-        args.putString(AppDialog.DIALOG_MESSAGE, "Usunąć " +nazwaGry+ "?");
+        args.putString(AppDialog.DIALOG_MESSAGE, "Usunąć " +listaRozgrywek.get(pozycja).getNazwaGry()+ "?");
         args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
 
-//        String selection = RozgrywkaContract.Kolumny.ROZGRYWKA_NAZWA + " = \"" +nazwaGry +"\"";
-//        args.putString("selection", selection);
+        String selection = RozgrywkaContract.Kolumny.ROZGRYWKA_ID + " = \"" +idRozgrywki +"\"";
+        args.putString("selection", selection);
 
         dialog.setArguments(args);
         dialog.show(getFragmentManager(), null);

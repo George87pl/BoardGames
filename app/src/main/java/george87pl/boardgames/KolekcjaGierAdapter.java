@@ -59,8 +59,11 @@ public class KolekcjaGierAdapter extends BaseAdapter {
             File f = new File(mCurrentPhotoPath);
             Uri contentUri = Uri.fromFile(f);
             zdjecieGry.setImageURI(contentUri);
+        } else {
+            nazwaGry.setText(listaGier.get(position).getNazwaGry());
+            nazwaGry.setVisibility(TextView.VISIBLE);
         }
-        nazwaGry.setText(listaGier.get(position).getNazwaGry());
+
 
 
         return convertView;

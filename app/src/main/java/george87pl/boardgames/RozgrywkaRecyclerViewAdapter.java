@@ -50,7 +50,6 @@ class RozgrywkaRecyclerViewAdapter extends RecyclerView.Adapter<RozgrywkaRecycle
         }
 
         holder.nazwa.setText(rozgrywkaItem.getNazwaGry());
-        holder.opis.setText(rozgrywkaItem.getOpis());
         holder.data.setText(rozgrywkaItem.getData());
     }
 
@@ -69,7 +68,6 @@ class RozgrywkaRecyclerViewAdapter extends RecyclerView.Adapter<RozgrywkaRecycle
 
         ImageView zdjecie;
         TextView nazwa;
-        TextView opis;
         TextView data;
 
         public RozgrywkaWierszViewHolder(View itemView) {
@@ -79,7 +77,6 @@ class RozgrywkaRecyclerViewAdapter extends RecyclerView.Adapter<RozgrywkaRecycle
 
             this.zdjecie = itemView.findViewById(R.id.zdjecie_gry);
             this.nazwa = itemView.findViewById(R.id.tytul_gry);
-            this.opis = itemView.findViewById(R.id.opis_gry);
             this.data = itemView.findViewById(R.id.data_gry);
 
 
