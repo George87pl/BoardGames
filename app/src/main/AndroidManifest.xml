@@ -13,13 +13,13 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="PlayMoreGames"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
+            android:label="PlayMoreGames"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,17 +52,35 @@
                 android:value="george87pl.boardgames.MainActivity" />
         </activity>
         <activity
-            android:name=".DodajRozgrywke"
+            android:name="DodajRozgrywke"
             android:label="@string/title_activity_dodaj_rozgrywke"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:parentActivityName="george87pl.boardgames.KolekcjaGier"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="george87pl.boardgames.KolekcjaGier" />
+        </activity>
+
         <activity
             android:name=".DodajGre"
             android:label="@string/title_activity_dodaj_gre"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:parentActivityName="george87pl.boardgames.KolekcjaGier"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="george87pl.boardgames.KolekcjaGier" />
+        </activity>
+
         <activity
             android:name=".KolekcjaGier"
             android:label="@string/title_activity_gra"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:parentActivityName="george87pl.boardgames.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="george87pl.boardgames.MainActivity" />
+
+        </activity>
     </application>
 
 </manifest>

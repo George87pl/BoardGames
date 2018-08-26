@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
                 projection,
                 null,
                 null,
-                null);
+                WidokContract.Kolumny._ID + " DESC");
 
 
         int idGry;
@@ -72,23 +73,27 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         String zdjecieRozgrywki;
 
         if (cursor != null) {
-            while (cursor.moveToNext()) {
+            if(cursor.moveToFirst()) {
+                do {
 
-                idGry = cursor.getInt(cursor.getColumnIndex(WidokContract.Kolumny._ID));
-                nazwaGry = cursor.getString(cursor.getColumnIndex(WidokContract.Kolumny.WIDOK_GRA));
-                zdjecieGry = cursor.getString(cursor.getColumnIndex(WidokContract.Kolumny.WIDOK_GRA_ZDJECIE));
-                dataRozgrywki = cursor.getString(cursor.getColumnIndex(WidokContract.Kolumny.WIDOK_DATA));
-                opisRozgrywki = cursor.getString(cursor.getColumnIndex(WidokContract.Kolumny.WIDOK_OPIS));
-                zdjecieRozgrywki = cursor.getString(cursor.getColumnIndex(WidokContract.Kolumny.WIDOK_ROZGRYWKA_ZDJECIE));
+                    idGry = cursor.getInt(cursor.getColumnIndex(WidokContract.Kolumny._ID));
+                    nazwaGry = cursor.getString(cursor.getColumnIndex(WidokContract.Kolumny.WIDOK_GRA));
+                    zdjecieGry = cursor.getString(cursor.getColumnIndex(WidokContract.Kolumny.WIDOK_GRA_ZDJECIE));
+                    dataRozgrywki = cursor.getString(cursor.getColumnIndex(WidokContract.Kolumny.WIDOK_DATA));
+                    opisRozgrywki = cursor.getString(cursor.getColumnIndex(WidokContract.Kolumny.WIDOK_OPIS));
+                    zdjecieRozgrywki = cursor.getString(cursor.getColumnIndex(WidokContract.Kolumny.WIDOK_ROZGRYWKA_ZDJECIE));
 
-                Log.d(TAG, "onCreate: zdjecieRozgrywki:" +zdjecieRozgrywki);
+                    Log.d(TAG, "onCreate: zdjecieRozgrywki:" +zdjecieRozgrywki);
 
-                listaRozgrywek.add(new Rozgrywka(idGry, zdjecieGry, nazwaGry, dataRozgrywki, opisRozgrywki, zdjecieRozgrywki));
+                    listaRozgrywek.add(new Rozgrywka(idGry, zdjecieGry, nazwaGry, dataRozgrywki, opisRozgrywki, zdjecieRozgrywki));
 
+                } while (cursor.moveToNext());
+            } else {
+                TextView informacja = findViewById(R.id.informacja2);
+                informacja.setVisibility(View.VISIBLE);
             }
-        } else {
-            Log.d(TAG, "onCreate: KURSOR JEST PUSTY");  //TODO
-            listaRozgrywek.add(new Rozgrywka(1, null, "brak rozgrywek", null, null, null));
+
+
         }
 
         mRozgrywkaRecyclerViewAdapter = new RozgrywkaRecyclerViewAdapter(this, listaRozgrywek);

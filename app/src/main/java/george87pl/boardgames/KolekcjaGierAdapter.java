@@ -1,6 +1,8 @@
 package george87pl.boardgames;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,16 +57,15 @@ public class KolekcjaGierAdapter extends BaseAdapter {
 
         if(listaGier.get(position).getZdjecieGry() != null) {
             String mCurrentPhotoPath = listaGier.get(position).getZdjecieGry();
-            Log.d(TAG, "getView URI: " +mCurrentPhotoPath);
-            File f = new File(mCurrentPhotoPath);
-            Uri contentUri = Uri.fromFile(f);
-            zdjecieGry.setImageURI(contentUri);
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inScaled = true;
+            Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, options);
+            zdjecieGry.setImageBitmap(bitmap);
         } else {
             nazwaGry.setText(listaGier.get(position).getNazwaGry());
             nazwaGry.setVisibility(TextView.VISIBLE);
         }
-
-
 
         return convertView;
 

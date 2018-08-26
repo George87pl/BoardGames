@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class KolekcjaGier extends AppCompatActivity implements AppDialog.DialogE
         setContentView(R.layout.activity_kolekcja_gier);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -61,15 +63,20 @@ public class KolekcjaGier extends AppCompatActivity implements AppDialog.DialogE
         String zdjecie;
 
         if (cursor != null) {
-            while (cursor.moveToNext()) {
+            if(cursor.moveToFirst()) {
+                do {
+                    id = cursor.getInt(cursor.getColumnIndex(GraContract.Kolumny.GRA_ID));
+                    nazwa = cursor.getString(cursor.getColumnIndex(GraContract.Kolumny.GRA_NAZWA));
+                    zdjecie = cursor.getString(cursor.getColumnIndex(GraContract.Kolumny.GRA_ZDJECIE));
 
-                id = cursor.getInt(cursor.getColumnIndex(GraContract.Kolumny.GRA_ID));
-                nazwa = cursor.getString(cursor.getColumnIndex(GraContract.Kolumny.GRA_NAZWA));
-                zdjecie = cursor.getString(cursor.getColumnIndex(GraContract.Kolumny.GRA_ZDJECIE));
-
-                listaGier.add(new Gra(id, zdjecie, nazwa));
+                    listaGier.add(new Gra(id, zdjecie, nazwa));
+                } while (cursor.moveToNext());
+            } else {
+                TextView informacja = findViewById(R.id.informacja);
+                informacja.setVisibility(View.VISIBLE);
+                }
             }
-        }
+
 
         kolekcjaGierAdapter = new KolekcjaGierAdapter(this, listaGier);
         gridView.setAdapter(kolekcjaGierAdapter);

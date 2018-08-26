@@ -58,6 +58,7 @@ public class SzczegolyRozgrywki extends AppCompatActivity {
             File f = new File(mCurrentPhotoPath);
             Uri contentUri = Uri.fromFile(f);
             zdjecieRozgrywki.setImageURI(contentUri);
+            zdjecieRozgrywki.setVisibility(View.VISIBLE);
         }
 
     }

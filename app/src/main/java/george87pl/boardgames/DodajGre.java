@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,7 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,13 +33,11 @@ public class DodajGre extends AppCompatActivity {
     private static final String TAG = "DodajGre";
 
     private EditText gNazwaGry;
-    private ImageView gGraZdjecieZrob;
+    private ImageView gGraZdjeciePokaz;
     private String mCurrentPhotoPath;
-    private boolean czyByloZdjecie = false;
-//    static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int PICK_IMAGE = 1;
-    Bitmap imageBitmap;
     Uri imageUri;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,15 +45,22 @@ public class DodajGre extends AppCompatActivity {
         setContentView(R.layout.activity_dodaj_gre);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         gNazwaGry = findViewById(R.id.dodajNazweGry);
-        gGraZdjecieZrob = findViewById(R.id.graZdjecieZrob);
+        ImageView gGraZdjecieZrob = findViewById(R.id.graZdjecieZrob);
+        gGraZdjeciePokaz = findViewById(R.id.graZdjeciePokaz);
 
-//        if (savedInstanceState!=null)
-//        {
-//            imageBitmap=savedInstanceState.getParcelable("image");
-//            gGraZdjecieZrob.setImageBitmap(imageBitmap);
-//        }
+        if (savedInstanceState != null) {
+            mCurrentPhotoPath = savedInstanceState.getString("photo_path");
+            imageUri = savedInstanceState.getParcelable("image");
+
+            if(imageUri != null) {
+                gGraZdjeciePokaz.setImageURI(imageUri);
+                gGraZdjeciePokaz.setVisibility(View.VISIBLE);
+            }
+
+        }
 
         gGraZdjecieZrob.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,8 +73,8 @@ public class DodajGre extends AppCompatActivity {
 //                    czyByloZdjecie = true;
 //                }
 
-                Intent intent =new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                startActivityForResult(intent,PICK_IMAGE);
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                startActivityForResult(intent, PICK_IMAGE);
 
             }
         });
@@ -82,9 +91,8 @@ public class DodajGre extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE) {
             imageUri = data.getData();
-            Log.d(TAG, "onActivityResult: IMAGE URI!!!!!!!!! " +imageUri);
-            gGraZdjecieZrob.setImageURI(imageUri);
-            czyByloZdjecie = true;
+            gGraZdjeciePokaz.setImageURI(imageUri);
+            gGraZdjeciePokaz.setVisibility(View.VISIBLE);
         }
     }
 
@@ -105,72 +113,78 @@ public class DodajGre extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.graZapisz) {
 
-            ContentResolver contentResolver = getContentResolver();
-            ContentValues values = new ContentValues();
+            if (gNazwaGry.length() < 1) {
+                Toast.makeText(this, "Nazwa gry jest wymagana", Toast.LENGTH_SHORT).show();
+            } else {
+                ContentResolver contentResolver = getContentResolver();
+                ContentValues values = new ContentValues();
 
-            if (czyByloZdjecie) {
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                String imageFileName = "JPEG_" + timeStamp + "_";
-                File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                if (imageUri != null) {
+                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                    String imageFileName = "JPEG_" + timeStamp + "_";
+                    File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
-                try {
-                    File image = File.createTempFile(
-                            imageFileName,  /* prefix */
-                            ".jpg",         /* suffix */
-                            storageDir      /* directory */);
-
-                    mCurrentPhotoPath = image.getAbsolutePath();
-                } catch (IOException e) {
-                    Log.d(TAG, "onOptionsItemSelected: IOException " + e);
-                }
-
-
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-                FileOutputStream out = null;
-                try {
-                    out = new FileOutputStream(mCurrentPhotoPath);
-                    bitmap = Bitmap.createScaledBitmap(bitmap, 120, 96, false);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out); // bmp is your Bitmap instance
-                    // PNG is a lossless format, the compression factor (100) is ignored
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
                     try {
-                        if (out != null) {
-                            out.close();
-                        }
+                        File image = File.createTempFile(
+                                imageFileName,  /* prefix */
+                                ".jpg",         /* suffix */
+                                storageDir      /* directory */);
+
+                        mCurrentPhotoPath = image.getAbsolutePath();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Log.d(TAG, "onOptionsItemSelected: IOException " + e);
+                    }
+
+                    OutputStream fOut;
+
+                    try {
+                        fOut = new FileOutputStream(mCurrentPhotoPath);
+
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+
+                        int width = bitmap.getWidth();
+                        int height = bitmap.getHeight();
+                        if(width > height) {
+                            bitmap = Bitmap.createScaledBitmap(bitmap, 100, 76, false);
+                        } else if (width < height){
+                            bitmap = Bitmap.createScaledBitmap(bitmap, 76, 100, false);
+                        } else {
+                            bitmap = Bitmap.createScaledBitmap(bitmap, 96, 96, false);
+                        }
+
+
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                        fOut.close(); // do not forget to close the stream
+
+                        values.put(GraContract.Kolumny.GRA_ZDJECIE, mCurrentPhotoPath);
+                    } catch (Exception e) {
+                        Log.d(TAG, "onOptionsItemSelected: e: " + e);
                     }
                 }
 
+                values.put(GraContract.Kolumny.GRA_NAZWA, gNazwaGry.getText().toString());
+                contentResolver.insert(GraContract.CONTENT_URI, values);
 
-
-                values.put(GraContract.Kolumny.GRA_ZDJECIE, mCurrentPhotoPath);
+                Intent intent = new Intent(DodajGre.this, KolekcjaGier.class);
+                startActivity(intent);
             }
 
-            values.put(GraContract.Kolumny.GRA_NAZWA, gNazwaGry.getText().toString());
-            contentResolver.insert(GraContract.CONTENT_URI, values);
-
-            Intent intent = new Intent(DodajGre.this, KolekcjaGier.class);
-            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState)
-    {
+    public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putParcelable("image", imageBitmap);
+
+        if (imageUri != null) {
+            savedInstanceState.putParcelable("image", imageUri);
+        }
+        if (mCurrentPhotoPath != null) {
+            savedInstanceState.putString("photo_path", mCurrentPhotoPath);
+
+        }
     }
 }
 

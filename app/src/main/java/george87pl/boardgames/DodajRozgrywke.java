@@ -31,11 +31,10 @@ import java.util.Date;
 public class DodajRozgrywke extends AppCompatActivity {
     private static final String TAG = "DodajRozgrywke";
 
-    private EditText mNazwaGry;
     private EditText mOpisGry;
-    private ImageView mRozgrywkaZdjecieZrob;
+    ImageView rozgrywkaZdjeciePokaz;
     private String mCurrentPhotoPath;
-    private boolean czyByloZdjecie = false;
+    private Uri imageUri;
     static final int REQUEST_TAKE_PHOTO = 1;
 
 
@@ -49,9 +48,25 @@ public class DodajRozgrywke extends AppCompatActivity {
         setContentView(R.layout.activity_dodaj_rozgrywke);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mOpisGry = findViewById(R.id.graOpisDodaj);
-        mRozgrywkaZdjecieZrob = findViewById(R.id.rozgrywkaZdjecieZrob);
+        ImageView mRozgrywkaZdjecieZrob = findViewById(R.id.rozgrywkaZdjecieZrob);
+
+        if (savedInstanceState != null) {
+
+            mCurrentPhotoPath = savedInstanceState.getString("photo_path");
+
+            if(mCurrentPhotoPath != null){
+                File f = new File(mCurrentPhotoPath);
+                imageUri = Uri.fromFile(f);
+                rozgrywkaZdjeciePokaz = findViewById(R.id.rozgrywkaZdjeciePokaz);
+                rozgrywkaZdjeciePokaz.setImageURI(imageUri);
+                rozgrywkaZdjeciePokaz.setVisibility(View.VISIBLE);
+            }
+
+
+        }
 
         View.OnClickListener kiedyCosKlikniete = new View.OnClickListener() {
             @Override
@@ -61,9 +76,7 @@ public class DodajRozgrywke extends AppCompatActivity {
 
                     case R.id.rozgrywkaZdjecieZrob:
 
-                        if(dispatchTakePictureIntent()) {
-                            czyByloZdjecie = true;
-                        }
+                        dispatchTakePictureIntent();
 
                         break;
 
@@ -100,12 +113,12 @@ public class DodajRozgrywke extends AppCompatActivity {
             Gra gra = (Gra) intentGra.getSerializableExtra("Gra"); // Dostaje tu teraz kompletny obiekt, wybrany z kolekcji gier
 
             Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat format = new SimpleDateFormat("d.MM.yyyy hh:mm");
+            SimpleDateFormat format = new SimpleDateFormat("d.MM.yyyy HH:mm");
 
             values.put(RozgrywkaContract.Kolumny.ROZGRYWKA_GRA, gra.getidGry());
             values.put(RozgrywkaContract.Kolumny.ROZGRYWKA_DATA, format.format(calendar.getTime()));
             values.put(RozgrywkaContract.Kolumny.ROZGRYWKA_OPIS, mOpisGry.getText().toString());
-            if(czyByloZdjecie) {
+            if(mCurrentPhotoPath != null) {
                 values.put(RozgrywkaContract.Kolumny.ROZGRYWKA_ZDJECIE, mCurrentPhotoPath);
             }
             contentResolver.insert(RozgrywkaContract.CONTENT_URI, values);
@@ -150,10 +163,10 @@ public class DodajRozgrywke extends AppCompatActivity {
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
+                Uri image = FileProvider.getUriForFile(this,
                         "george87pl.boardgames.fileprovider",
                         photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, image);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
                 return true;
             }
@@ -163,12 +176,21 @@ public class DodajRozgrywke extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
 
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             File f = new File(mCurrentPhotoPath);
-            Uri contentUri = Uri.fromFile(f);
-            mRozgrywkaZdjecieZrob.setImageURI(contentUri);
+            imageUri = Uri.fromFile(f);
+            rozgrywkaZdjeciePokaz = findViewById(R.id.rozgrywkaZdjeciePokaz);
+            rozgrywkaZdjeciePokaz.setImageURI(imageUri);
+            rozgrywkaZdjeciePokaz.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putString("photo_path", mCurrentPhotoPath);
+        savedInstanceState.putParcelable("imageUri", imageUri);
     }
 }
